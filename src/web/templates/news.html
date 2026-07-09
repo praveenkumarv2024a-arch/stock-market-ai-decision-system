@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Trade | Market News</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='modern.css') }}?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-robot"></i> AI<span>Trade</span>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="/" class="nav-item"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="/portfolio" class="nav-item"><i class="fa-solid fa-briefcase"></i> Portfolio</a>
+                <a href="/news" class="nav-item active"><i class="fa-solid fa-newspaper"></i> News</a>
+                <a href="/settings" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+            </nav>
+
+            <div class="system-status-box">
+                <div class="status-ver">v1.2.0</div>
+                <div class="uptime">
+                    <span class="dot"></span> <span id="uptime-display">Online</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar" style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="page-title">
+                    <h1>Market News</h1>
+                    <span class="subtitle">Latest curated financial news</span>
+                </div>
+                <button id="refresh-news-btn" class="btn-secondary">
+                    <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                </button>
+            </header>
+
+            <div class="content-placeholder" style="padding: 2rem; text-align: center; color: #888;">
+                <i class="fa-solid fa-newspaper" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                <h2>Global News Feed Coming Soon</h2>
+                <p>Aggregated news from top financial sources will appear here.</p>
+            </div>
+        </main>
+        <script src="{{ url_for('static', filename='news.js') }}"></script>
+</body>
+
+</html>

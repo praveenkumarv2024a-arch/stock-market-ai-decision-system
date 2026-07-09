@@ -1,0 +1,29 @@
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Local databases and caches
+data/market_data.db
+data/market_data.db-shm
+data/market_data.db-wal
+data/dashboard_cache.json
+data/paper_trading.json
+data/settings.json
+
+# Image files generated dynamically
+data/*.png
+data/*.html
+test_*.png
+Figure_*.png
+
+# Error log files
+error_log.txt
+
+# Virtual Environment
+venv/
+.venv/
+env/
+ENV/

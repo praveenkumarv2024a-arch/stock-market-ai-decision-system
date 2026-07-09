@@ -1,0 +1,11 @@
+/* Update to existing CSS for sparkline support */
+.sparkline {
+    height: 40px;
+    margin: 10px 0;
+    text-align: center;
+    opacity: 0.8;
+}
+
+.sparkline svg {
+    overflow: visible;
+}

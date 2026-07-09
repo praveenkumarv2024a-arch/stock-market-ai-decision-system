@@ -1,0 +1,16 @@
+yfinance
+feedparser
+pandas
+numpy
+scikit-learn
+flask
+plotly
+textblob
+requests
+beautifulsoup4
+vaderSentiment
+ta
+xgboost
+lightgbm
+shap
+gunicorn

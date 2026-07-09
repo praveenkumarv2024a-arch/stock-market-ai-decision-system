@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Trade | Settings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='modern.css') }}?v=4">
+    <link rel="stylesheet" href="{{ url_for('static', filename='modern.css') }}?v=4">
+    <link rel="stylesheet" href="{{ url_for('static', filename='settings.css') }}?v=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-robot"></i> AI<span>Trade</span>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="/" class="nav-item"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="/portfolio" class="nav-item"><i class="fa-solid fa-briefcase"></i> Portfolio</a>
+                <a href="/news" class="nav-item"><i class="fa-solid fa-newspaper"></i> News</a>
+                <a href="/settings" class="nav-item active"><i class="fa-solid fa-gear"></i> Settings</a>
+            </nav>
+
+            <div class="system-status-box">
+                <div class="status-ver">v1.2.0</div>
+                <div class="uptime">
+                    <span class="dot"></span> <span id="uptime-display">Online</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="page-title">
+                    <h1>Settings</h1>
+                    <span class="subtitle">Personalize your AI trading experience</span>
+                </div>
+            </header>
+
+            <div class="settings-grid"
+                style="padding: 2rem; max-width: 900px; display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">
+
+                <!-- AI Configuration -->
+                <div class="card glass-panel settings-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-brain"></i> AI Configuration</h3>
+                    </div>
+                    <div class="setting-item">
+                        <label>Risk Tolerance</label>
+                        <p class="setting-desc">Adjusts how aggressive the AI is with Buy/Sell signals.</p>
+                        <div class="toggle-group">
+                            <button class="toggle-btn" data-value="conservative"
+                                onclick="setRisk('conservative')">Conservative</button>
+                            <button class="toggle-btn active" data-value="balanced"
+                                onclick="setRisk('balanced')">Balanced</button>
+                            <button class="toggle-btn" data-value="aggressive"
+                                onclick="setRisk('aggressive')">Aggressive</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Preferences -->
+                <div class="card glass-panel settings-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-desktop"></i> Dashboard</h3>
+                    </div>
+                    <div class="setting-item">
+                        <label>Refresh Rate: <span id="refresh-val">5s</span></label>
+                        <input type="range" id="refresh-rate" min="2" max="60" value="5"
+                            oninput="document.getElementById('refresh-val').innerText = this.value + 's'">
+                    </div>
+
+                    <div class="setting-item row-item">
+                        <div>
+                            <label>Market Hours Only</label>
+                            <p class="setting-desc">Pause updates when market is closed.</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="market-hours">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item row-item">
+                        <div>
+                            <label>Theme</label>
+                        </div>
+                        <select id="theme-select" onchange="changeTheme(this.value)"
+                            style="padding: 5px; border-radius: 5px; background: #2a2a35; color: white; border: 1px solid #444;">
+                            <option value="dark">Dark Mode</option>
+                            <option value="light">Light Mode</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Data Management -->
+                <div class="card glass-panel settings-card" style="grid-column: 1 / -1;">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-database"></i> Data Management</h3>
+                    </div>
+                    <div class="setting-actions">
+                        <button class="btn-secondary" onclick="resetData('cache')"><i class="fa-solid fa-trash-can"></i>
+                            Clear Cache</button>
+                        <button class="btn-danger" onclick="resetData('portfolio')"><i class="fa-solid fa-bomb"></i>
+                            Reset Portfolio</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="save-bar glass"
+                style="position: fixed; bottom: 20px; right: 20px; padding: 15px; border-radius: 10px; display: none;"
+                id="save-bar">
+                <span style="margin-right: 15px;">You have unsaved changes</span>
+                <button class="btn-primary" onclick="saveSettings()">Save Changes</button>
+            </div>
+
+        </main>
+
+        <script>
+            let currentSettings = {};
+
+            // Load Settings on Start
+            fetch('/api/settings')
+                .then(r => r.json())
+                .then(data => {
+                    currentSettings = data;
+                    applyUI(data);
+                });
+
+            function applyUI(data) {
+                // Risk
+                document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+                const riskBtn = document.querySelector(`.toggle-btn[data-value="${data.risk_tolerance}"]`);
+                if (riskBtn) riskBtn.classList.add('active');
+
+                // Refresh
+                document.getElementById('refresh-rate').value = data.refresh_rate;
+                document.getElementById('refresh-val').innerText = data.refresh_rate + 's';
+
+                // Market Hours
+                document.getElementById('market-hours').checked = data.market_hours_only;
+
+                // Theme
+                document.getElementById('theme-select').value = data.theme || 'dark';
+            }
+
+            function setRisk(val) {
+                currentSettings.risk_tolerance = val;
+                document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector(`.toggle-btn[data-value="${val}"]`).classList.add('active');
+                showSave();
+            }
+
+            document.getElementById('refresh-rate').addEventListener('input', (e) => {
+                currentSettings.refresh_rate = parseInt(e.target.value);
+                showSave();
+            });
+
+            document.getElementById('market-hours').addEventListener('change', (e) => {
+                currentSettings.market_hours_only = e.target.checked;
+                showSave();
+            });
+
+            function showSave() {
+                document.getElementById('save-bar').style.display = 'block';
+            }
+
+            function saveSettings() {
+                fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(currentSettings)
+                })
+                    .then(r => r.json())
+                    .then(data => {
+                        alert("Settings Saved!");
+                        document.getElementById('save-bar').style.display = 'none';
+                    });
+            }
+
+            function changeTheme(theme) {
+                currentSettings.theme = theme;
+                showSave();
+                // Immediate effect demo ( would need real CSS swap )
+                if (theme === 'light') {
+                    document.body.style.background = '#f0f2f5';
+                    document.body.style.color = '#333';
+                } else {
+                    document.body.style.background = '#0f172a';
+                    document.body.style.color = '#fff';
+                }
+            }
+
+            function resetData(type) {
+                if (!confirm("Are you sure? This cannot be undone.")) return;
+                fetch('/api/settings/reset', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: type })
+                })
+                    .then(r => r.json())
+                    .then(data => alert(data.message));
+            }
+        </script>
+    </div>
+</body>
+
+</html>
