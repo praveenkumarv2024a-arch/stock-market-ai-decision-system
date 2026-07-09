@@ -63,6 +63,30 @@ A customized AI-powered financial dashboard that evaluates Indian stocks (NSE) a
 
 ---
 
+## 📸 Application Screenshots
+
+### 1. Main Market Dashboard
+*Displays tracked stocks with their live prices, daily percentage change, technical indicators (RSI & Sentiment), and calculated buying possibility score with risk categorizations.*
+![Market Dashboard](images/dashboard.png)
+
+### 2. Sniper Mode Filtering
+*Filters out weak signals dynamically, displaying only high-probability setups with a Buying Possibility Score $\ge 80\%$.*
+![Sniper Mode](images/sniper_mode.png)
+
+### 3. Paper Trading Simulator
+*Real-time virtual portfolio tracker allowing users to buy and sell stocks, manage cash balances, and view detailed realized/unrealized profit & loss (PnL).*
+![Paper Trading Portfolio](images/portfolio.png)
+
+### 4. Financial News Sentiment Feed
+*Curated financial news articles tagged with their respective stock symbol and classified as Positive, Negative, or Neutral using the VADER/TextBlob sentiment engine.*
+![Market News](images/news.png)
+
+### 5. Interactive Live Chart & Sentiment Map
+*Interactive price charts plotted across multiple timeframes alongside a visual Fear & Greed treemap sized by stock price and colored by sentiment.*
+![Live Chart & Sentiment Map](images/live_chart.png)
+
+---
+
 
 ## 🛠️ Tech Stack
 
