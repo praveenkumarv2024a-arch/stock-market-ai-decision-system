@@ -1,6 +1,6 @@
 # Indian Stock Market AI Decision System 📈🤖
 
-A customized AI-powered financial dashboard that provides **BUY**, **SELL**, or **HOLD** recommendations for Indian stocks (NSE). The system integrates real-time stock prices, news sentiment analysis, company fundamentals, and explainable Machine Learning models.
+A customized AI-powered financial dashboard that evaluates Indian stocks (NSE) and calculates a **Buying Possibility Score (0–99%)** along with dynamic **Risk Categorization** (Low, Moderate, High Risk). The system integrates real-time stock prices, NLP-based news sentiment, company fundamentals, and explainable Machine Learning models.
 
 ---
 
@@ -9,18 +9,23 @@ A customized AI-powered financial dashboard that provides **BUY**, **SELL**, or 
 * **Real-time Market Data**: Fetches live stock prices and historical data using `yfinance`.
 * **NLP News Sentiment**: Scrapes financial news using `BeautifulSoup` & `feedparser`, evaluating sentiment scores with `vaderSentiment` and `textblob`.
 * **Fundamental Indicators**: Analyzes key company health metrics (P/E Ratio, ROE, Debt-to-Equity, etc.).
-* **Hybrid ML/AI Predictions**: Leverages state-of-the-art predictive algorithms including **XGBoost**, **LightGBM**, and **LSTM** networks.
-* **Explainable AI (XAI)**: Generates SHAP (SHapley Additive exPlanations) plots to explain *why* the model makes a specific decision.
-* **Paper Trading Simulator**: Includes a mock trading account with fund management to test your AI strategies.
+* **Buying Possibility Score (0-99%)**: Replaces generic "BUY/SELL/HOLD" signals with a precise probability score indicating the strength of a buying opportunity, powered by **XGBoost**, **LightGBM**, and **LSTM** networks.
+* **Risk Categorization**: Automatically classifies stocks based on their Buying Possibility:
+  * 🟢 **Low Risk**: Score $\ge$ 76%
+  * 🟡 **Moderate Risk**: 36% $\le$ Score < 76%
+  * 🔴 **High Risk**: Score < 36%
+* **Sniper Mode**: A filter that displays only high-probability setups (Buying Possibility Score > 80%) while hiding weaker signals.
+* **Explainable AI (XAI)**: Generates SHAP (SHapley Additive exPlanations) waterfall plots to explain *which* specific factors (e.g. RSI, news sentiment, valuation) are driving the final score up or down.
+* **Paper Trading Simulator**: Includes a mock trading account with fund management to test your strategies.
 
 ---
 
 ## 🛠️ Tech Stack
 
 * **Backend**: Flask (Python)
-* **Frontend**: HTML5, Vanilla CSS, JS (Interactive Plotly Charts)
+* **Frontend**: HTML5, Vanilla CSS, JS (Interactive Plotly & ApexCharts)
 * **Database**: SQLite (local) / PostgreSQL (production)
-* **Data Processing**: Pandas, NumPy, Ta (Technical Analysis)
+* **Data Processing**: Pandas, NumPy, Ta (Technical Analysis Library)
 * **Machine Learning**: Scikit-Learn, XGBoost, LightGBM, SHAP
 * **Sentiment Analysis**: VADER Sentiment, TextBlob
 
@@ -76,8 +81,8 @@ A customized AI-powered financial dashboard that provides **BUY**, **SELL**, or 
 ## 📊 Model Explainability (SHAP)
 Instead of acting as a "black box," the system uses **SHAP values** to explain how individual indicators (e.g., RSI, News Sentiment, MACD) influence the model's decision:
 
-* **Positive SHAP Value**: Features driving the recommendation toward a **BUY**.
-* **Negative SHAP Value**: Features driving the recommendation toward a **SELL**.
+* **Positive SHAP Value**: Features driving the recommendation toward a higher **Buying Possibility**.
+* **Negative SHAP Value**: Features lowering the score and pushing it toward **High Risk**.
 
 ---
 
