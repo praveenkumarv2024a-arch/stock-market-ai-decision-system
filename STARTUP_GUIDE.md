@@ -5,8 +5,8 @@ To make the dashboard open automatically when you log in to Windows, follow thes
 ## 1. Test the Script
 1. Go to your project folder: `c:\stock market`
 2. Double-click **`start_dashboard.bat`**.
-3. A black window (CMD) should appear, and you should see "Running on http://127.0.0.1:5000".
-4. Open your browser to that URL to verify it's working.
+3. A black window (CMD) should appear, and you should see "Running on http://127.0.0.1:5004".
+4. Open your browser to http://127.0.0.1:5004 to verify it's working.
 
 ## 2. Add to Windows Startup (Hidden Mode)
 To ensure the black window doesn't bother you:

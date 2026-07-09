@@ -1,4 +1,7 @@
 import numpy as np
+import os
+
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -17,7 +20,7 @@ def generate_shap_plot():
     plt.xlabel('Mean |SHAP Value| (Impact on Algorithmic Prediction)')
     
     plt.tight_layout()
-    plt.savefig('Figure_3_SHAP_Importance.png', dpi=300)
+    plt.savefig(os.path.join(ROOT_DIR, 'Figure_3_SHAP_Importance.png'), dpi=300)
     plt.close()
 
 def generate_technical_chart():
@@ -41,7 +44,7 @@ def generate_technical_chart():
     plt.ylabel('Asset Value (\u20B9)')
     plt.legend(loc='upper left')
     plt.tight_layout()
-    plt.savefig('Figure_4_Technical_Indicators.png', dpi=300)
+    plt.savefig(os.path.join(ROOT_DIR, 'Figure_4_Technical_Indicators.png'), dpi=300)
     plt.close()
 
 def generate_model_comparison():
@@ -56,7 +59,7 @@ def generate_model_comparison():
     plt.ylabel('F1-Score (Harmonic Mean of Precision & Recall)')
     
     plt.tight_layout()
-    plt.savefig('Figure_5_Model_Comparison.png', dpi=300)
+    plt.savefig(os.path.join(ROOT_DIR, 'Figure_5_Model_Comparison.png'), dpi=300)
     plt.close()
 
 if __name__ == "__main__":

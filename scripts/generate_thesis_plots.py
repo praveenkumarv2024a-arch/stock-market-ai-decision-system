@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 # Set the style to look professional and academic
 plt.style.use('bmh')
 
@@ -25,7 +27,7 @@ def generate_correlation_matrix():
     sns.heatmap(corr, annot=True, cmap='coolwarm', vmin=-1, vmax=1, fmt=".2f", linewidths=.5)
     plt.title('Figure 1: Cross-Sector Multivariate Correlation Matrix', pad=20)
     plt.tight_layout()
-    plt.savefig('Figure_1_Correlation_Matrix.png', dpi=300)
+    plt.savefig(os.path.join(ROOT_DIR, 'Figure_1_Correlation_Matrix.png'), dpi=300)
     plt.close()
 
 def generate_density_plot():
@@ -45,7 +47,7 @@ def generate_density_plot():
     plt.legend()
     plt.xlim(-0.15, 0.15)
     plt.tight_layout()
-    plt.savefig('Figure_2_Return_Density.png', dpi=300)
+    plt.savefig(os.path.join(ROOT_DIR, 'Figure_2_Return_Density.png'), dpi=300)
     plt.close()
 
 if __name__ == "__main__":
