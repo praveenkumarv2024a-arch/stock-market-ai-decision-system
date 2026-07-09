@@ -35,11 +35,14 @@ A customized AI-powered financial dashboard that evaluates Indian stocks (NSE) a
 
 ```text
 ├── data/                  # SQLite DB, cash balance, settings, and cached analysis
+├── notebooks/             # Jupyter notebooks for model training and EDA (empty/optional)
+├── scripts/               # Python utility scripts for database inspection and bulk updates
 ├── src/
 │   ├── data/              # Data collection scripts (Yahoo news, fundamentals)
 │   ├── features/          # Feature engineering & technical indicators calculation
 │   ├── models/            # ML model prediction and SHAP explainability
 │   └── web/               # Flask routing, UI templates, and paper trading API
+├── tests/                 # Unit test suite for data collection and NLP sentiment
 ├── run.py                 # Main entry point to launch the application
 ├── requirements.txt       # Python package dependencies
 └── STARTUP_GUIDE.md       # Guide on auto-starting the app on Windows
