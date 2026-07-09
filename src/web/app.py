@@ -208,8 +208,19 @@ def get_paper_portfolio():
                  if p and p > 0:
                      live_price = float(p)
                      # Update Cache
-                     if symbol not in CACHE_DICT: CACHE_DICT[symbol] = {}
-                     CACHE_DICT[symbol]['price'] = round(live_price, 2)
+                     if symbol not in CACHE_DICT:
+                         CACHE_DICT[symbol] = {
+                             "symbol": symbol,
+                             "price": round(live_price, 2),
+                             "change": 0.0,
+                             "sentiment": 0.0,
+                             "rsi": 50.0,
+                             "decision": "HOLD",
+                             "confidence": 0.5,
+                             "history": []
+                         }
+                     else:
+                         CACHE_DICT[symbol]['price'] = round(live_price, 2)
              except: pass
 
         invested = qty * avg_price
@@ -477,9 +488,20 @@ def refresh_stock(symbol):
                      success = True
             
             if success:
-                if symbol not in CACHE_DICT: CACHE_DICT[symbol] = {}
-                CACHE_DICT[symbol]['price'] = round(float(price), 2)
-                CACHE_DICT[symbol]['change'] = round(float(change), 2)
+                if symbol not in CACHE_DICT:
+                    CACHE_DICT[symbol] = {
+                        "symbol": symbol,
+                        "price": round(float(price), 2),
+                        "change": round(float(change), 2),
+                        "sentiment": 0.0,
+                        "rsi": 50.0,
+                        "decision": "HOLD",
+                        "confidence": 0.5,
+                        "history": []
+                    }
+                else:
+                    CACHE_DICT[symbol]['price'] = round(float(price), 2)
+                    CACHE_DICT[symbol]['change'] = round(float(change), 2)
                 price_updated = True
                 print(f"Refreshed Price {symbol}: {price}")
                 
@@ -585,7 +607,6 @@ def get_portfolio_data():
                 current_price = CACHE_DICT[symbol].get('price', 0.0)
             
             # Fallback if not in cache (could be checking stock_prices or fetching)
-            # Fallback if not in cache (could be checking stock_prices or fetching)
             if current_price == 0:
                  # Check Database
                  try:
@@ -604,8 +625,19 @@ def get_portfolio_data():
                                     current_price = df_p['Close'].iloc[-1]
                             # Update Cache so next time it's fast
                             if current_price > 0:
-                                CACHE_DICT[symbol] = CACHE_DICT.get(symbol, {})
-                                CACHE_DICT[symbol]['price'] = current_price
+                                if symbol not in CACHE_DICT:
+                                    CACHE_DICT[symbol] = {
+                                        "symbol": symbol,
+                                        "price": current_price,
+                                        "change": 0.0,
+                                        "sentiment": 0.0,
+                                        "rsi": 50.0,
+                                        "decision": "HOLD",
+                                        "confidence": 0.5,
+                                        "history": []
+                                    }
+                                else:
+                                    CACHE_DICT[symbol]['price'] = current_price
                         except: pass
                  except: pass
 
@@ -860,7 +892,19 @@ def update_data_loop():
                     live_injection = rt_price if rt_price > 0 else None
                     df = fe.prepare_data(symbol, is_training=False, live_price=live_injection)
                     
-                    if df is None or df.empty: return
+                    if df is None or df.empty:
+                        # Populates defaults if cache entry is incomplete
+                        existing = CACHE_DICT.get(symbol, {})
+                        defaults = {
+                            "symbol": symbol, "price": rt_price if rt_price > 0 else 0.0, 
+                            "change": rt_change, "sentiment": 0.0,
+                            "rsi": 50.0, "decision": "HOLD", "confidence": 0.5, "history": []
+                        }
+                        for k, v in defaults.items():
+                            if k not in existing:
+                                existing[k] = v
+                        CACHE_DICT[symbol] = existing
+                        return
                         
                     latest = df.iloc[-1]
                     price = latest['close'] # This will now be rt_price if injected
@@ -988,10 +1032,16 @@ def update_data_loop():
                 except Exception as e:
                     print(f"BG Process Error {symbol}: {e}")
                     # Placeholder
-                    CACHE_DICT[symbol] = CACHE_DICT.get(symbol, {
-                        "symbol": symbol, "price": 0.0, "change": 0.0, "sentiment":0.0,
-                        "rsi":0.0, "decision":"BUY", "confidence":0.5 # Default safety
-                    })
+                    # Ensure all keys exist
+                    existing = CACHE_DICT.get(symbol, {})
+                    defaults = {
+                        "symbol": symbol, "price": 0.0, "change": 0.0, "sentiment": 0.0,
+                        "rsi": 50.0, "decision": "HOLD", "confidence": 0.5, "history": []
+                    }
+                    for k, v in defaults.items():
+                        if k not in existing:
+                            existing[k] = v
+                    CACHE_DICT[symbol] = existing
 
             # Run in parallel (5 workers)
             with ThreadPoolExecutor(max_workers=5) as executor:

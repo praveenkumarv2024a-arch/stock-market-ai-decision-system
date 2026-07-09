@@ -306,16 +306,24 @@ document.addEventListener('DOMContentLoaded', () => {
         data.forEach(stock => {
             const card = document.createElement('div');
             card.className = 'card';
+            
+            // DEFENSIVE FALLBACKS FOR ROBUSTNESS
+            const symbol = stock.symbol || 'Unknown';
+            const price = stock.price !== undefined && stock.price !== null ? stock.price : 0.0;
+            const change = stock.change !== undefined && stock.change !== null ? stock.change : 0.0;
+            const rsi = stock.rsi !== undefined && stock.rsi !== null ? stock.rsi : 50.0;
+            const sentiment = stock.sentiment !== undefined && stock.sentiment !== null ? stock.sentiment : 0.0;
+            
             card.onclick = (e) => {
-                if (!e.target.closest('.remove-btn') && !e.target.closest('button')) openModal(stock.symbol);
+                if (!e.target.closest('.remove-btn') && !e.target.closest('button')) openModal(symbol);
             };
 
-            const changeClass = stock.change >= 0 ? 'positive' : 'negative';
-            const sign = stock.change >= 0 ? '+' : '';
+            const changeClass = change >= 0 ? 'positive' : 'negative';
+            const sign = change >= 0 ? '+' : '';
 
             // Confidence is 0-1. Convert to %
             // DEFENSIVE: Handle case where backend sends 0-1 OR 0-100
-            let score = stock.confidence;
+            let score = stock.confidence !== undefined && stock.confidence !== null ? stock.confidence : 0.5;
             if (score <= 1.0) {
                 score = Math.round(score * 100);
             } else {
@@ -341,12 +349,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             card.innerHTML = `
-                <div class="remove-btn" onclick="removeStock(event, '${stock.symbol}')"><i class="fa-solid fa-trash"></i></div>
+                <div class="remove-btn" onclick="removeStock(event, '${symbol}')"><i class="fa-solid fa-trash"></i></div>
                 <div class="card-header">
-                    <div class="symbol">${stock.symbol}</div>
-                    <div class="change ${changeClass}">${sign}${stock.change}%</div>
+                    <div class="symbol">${symbol}</div>
+                    <div class="change ${changeClass}">${sign}${change}%</div>
                 </div>
-                <div class="price">₹${stock.price}</div>
+                <div class="price">₹${price}</div>
                 
                 <div class="decision-box" style="text-align: left; padding: 12px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
@@ -359,8 +367,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 
                 <div class="metrics">
-                    <div class="metric">RSI: <span>${stock.rsi}</span></div>
-                    <div class="metric">Sent: <span>${stock.sentiment}</span></div>
+                    <div class="metric">RSI: <span>${rsi}</span></div>
+                    <div class="metric">Sent: <span>${sentiment}</span></div>
                 </div>
 
                 <div style="margin-top: 15px; display: flex; gap: 10px;">
@@ -376,8 +384,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 tradeBtn.onclick = (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log("Opening Trade Modal for " + stock.symbol);
-                    openTradeModal(stock.symbol, stock.price);
+                    console.log("Opening Trade Modal for " + symbol);
+                    openTradeModal(symbol, price);
                 };
             }
 
