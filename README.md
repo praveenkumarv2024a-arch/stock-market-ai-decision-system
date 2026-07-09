@@ -85,6 +85,14 @@ A customized AI-powered financial dashboard that evaluates Indian stocks (NSE) a
 *Interactive price charts plotted across multiple timeframes alongside a visual Fear & Greed treemap sized by stock price and colored by sentiment.*
 ![Live Chart & Sentiment Map](images/live_chart.png)
 
+### 6. AI Analysis & Explainability Reasoning
+*Detailed breakdown showing bullish drivers boosting the score, drag factors reducing the score, and sentiment modifiers in natural language.*
+![AI Reasoning](images/ai_reasoning.png)
+
+### 7. Stock Fundamentals Dashboard
+*Comprehensive snapshot displaying company financial metrics (e.g. Current Ratio, EBITDA, Debt-to-Equity, Market Cap) loaded directly from the database.*
+![Stock Fundamentals](images/fundamentals.png)
+
 ---
 
 
